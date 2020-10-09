@@ -1,10 +1,15 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use TCG\Voyager\Traits\Seedable;
 use Boldstellar\Ecommerce\database\seeds\CartBreadSeeder;
 
 class EcommerceDatabaseSeeder extends Seeder
 {
+    use Seedable;
+
+    protected $seedersPath = __DIR__ . '/';
+    
     /**
      * Seed the application's database.
      *
@@ -12,6 +17,6 @@ class EcommerceDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(CartBreadSeeder::class);
+        $this->seed('CartBreadSeeder');
     }
 }
