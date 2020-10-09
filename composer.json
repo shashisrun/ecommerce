@@ -1,0 +1,35 @@
+{
+    "name": "boldstellar/ecommerce",
+    "description": "this package is to integrate ecommerce module and features in boldstellar cms application",
+    "type": "plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sachin Maurya",
+            "email": "sachinmaurya.ext@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+      "psr-4": {
+        "Boldstellar\\Ecommerce\\": "src"
+      }
+    },
+    "extra": {
+      "laravel": {
+        "providers": [
+          "Boldstellar\\Ecommerce\\EcommerceServiceProvider"
+        ]
+      }
+    },
+    "scripts": {
+      "post-autoload-dump": [
+          "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+          "@php artisan package:discover",
+          "@php artisan migrate",
+          "@php artisan db:seed --class=EcommerceDatabaseSeeder"
+      ]
+  }
+
+}
