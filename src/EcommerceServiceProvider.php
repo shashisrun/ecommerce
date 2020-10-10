@@ -12,9 +12,9 @@ class EcommerceServiceProvider extends ServiceProvider{
         $this->loadMigrationsFrom(__DIR__.'\database\migrations'); 
         $this->loadMigrationsFrom (__DIR__.'\database\seeders'); 
         $this->mergeConfigFrom( __DIR__.'/config/config.php', 'ecommerce');
-        $this->publishes([
-            __DIR__.'/database/seeds/' => database_path('seeds'), 
-        ]);
+        // $this->publishes([
+        //     __DIR__.'/database/seeds/' => database_path('seeds'), 
+        // ]);
     }
 
     public function register()

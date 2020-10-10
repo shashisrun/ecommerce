@@ -93,6 +93,6 @@ class InstallCommand extends Command
         $this->info('Boldstellar Ecommerce installed Successfully, Enjoy! :)');
 
     }
-
+        
     
 }
