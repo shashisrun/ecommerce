@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use DB;
+use Illuminate\Support\Facades\DB;
+use TCG\Voyager\Models\DataRow;
+use TCG\Voyager\Models\DataType;
+
 
 class CartBreadSeed extends Seeder
 {
@@ -16,8 +19,28 @@ class CartBreadSeed extends Seeder
      */
     protected function dataType($field, $for)
     {
-        return  DB::table('data_types')->firstOrNew([$field => $for]);
+        return  DataType::firstOrNew([$field => $for]);
     }
+
+
+
+    
+     /**
+     * [dataRow description].
+     *
+     * @param [type] $type  [description]
+     * @param [type] $field [description]
+     *
+     * @return [type] [description]
+     */
+    protected function dataRow($type, $field)
+    {
+        return DataRow::firstOrNew([
+            'data_type_id' => $type->id,
+            'field'        => $field,
+        ]);
+    }
+
 
 
     /**
@@ -27,8 +50,9 @@ class CartBreadSeed extends Seeder
      */
     public function run()
     {
-        if (!($this->dataType('slug', 'carts'))->exists) {
-            DB::table('data_types')->insert([
+        $dataType = $this->dataType('slug', 'carts');
+        if (!$dataType->exists) {
+            $dataType->fill([
                 'name' => 'carts',
                 'slug' => 'carts',
                 'display_name_singular' => 'Cart',
@@ -41,10 +65,10 @@ class CartBreadSeed extends Seeder
         }
 
 
-        $cart = DB::table('data_types')->where('slug', 'carts')->firstOrFail();
-        $dataRow = DB::table('data_rows');
+        $cart = DataType::where('slug', 'carts')->firstOrFail();
 
-        if (!($this->dataRow($cart, 'id'))->exists) {
+        $dataRow = $this->dataRow($cart, 'id');
+        if (!$dataRow->exists) {
             $dataRow->fill([
                 'data_type_id'    => $cart->id,
                 'type'         => 'number',
@@ -61,7 +85,8 @@ class CartBreadSeed extends Seeder
             ])->save();
         }
             
-        if (!($this->dataRow($product, 'user_id'))->exists) {
+        $dataRow = $this->dataRow($cart, 'user_id');
+        if (!$dataRow->exists) {
             $dataRow->fill([
                 'data_type_id'    => $cart->id,
                 'type'         => 'number',
@@ -78,7 +103,8 @@ class CartBreadSeed extends Seeder
             ])->save();
         }
         
-        if (!($this->dataRow($product, 'product_id'))->exists) {
+        $dataRow = $this->dataRow($cart, 'product_id');
+        if (!$dataRow->exists) {
             $dataRow->fill([
                 'data_type_id'    => $cart->id,
                 'type'         => 'number',
@@ -95,7 +121,8 @@ class CartBreadSeed extends Seeder
             ])->save();
         }
 
-        if (!($this->dataRow($product, 'quentity'))->exists) {
+        $dataRow = $this->dataRow($cart, 'quentity');
+        if (!$dataRow->exists) {
             $dataRow->fill([
                 'data_type_id'    => $cart->id,
                 'type'         => 'number',
@@ -112,7 +139,8 @@ class CartBreadSeed extends Seeder
             ])->save();
         }
     
-        if (!($this->dataRow($product, 'created_at'))->exists) {
+        $dataRow = $this->dataRow($cart, 'created_at');
+        if (!$dataRow->exists) {
             $dataRow->fill([
                 'data_type_id'    => $cart->id,
                 'type'         => 'timestamp',
@@ -129,7 +157,8 @@ class CartBreadSeed extends Seeder
             ])->save();
         }
     
-        if (!( $this->dataRow($product, 'updated_at'))->exists) {
+        $dataRow = $this->dataRow($cart, 'updated_at');
+        if (!$dataRow->exists) {
             $dataRow->fill([
                 'data_type_id'    => $cart->id,
                 'type'         => 'timestamp',
@@ -144,8 +173,9 @@ class CartBreadSeed extends Seeder
                 'order'        => 7,
             ])->save();
         }
-                
-        if (!($this->dataRow($product, 'cart_belongsto_user_relationship'))->exists) {
+
+         $dataRow = $this->dataRow($cart, 'cart_belongsto_user_relationship');        
+        if (!$dataRow->exists) {
             $dataRow->fill([
                 'data_type_id'    => $cart->id,
                 'type'         => 'relationship',
@@ -172,7 +202,8 @@ class CartBreadSeed extends Seeder
             ])->save();
         }
 
-        if (!($this->dataRow($product, 'cart_belongstomany_product_relationship'))->exists) {
+        $dataRow = $this->dataRow($cart, 'cart_belongstomany_product_relationship');
+        if (!$dataRow->exists) {
             $dataRow->fill([
                 'type'         => 'relationship',
                 'display_name' => 'cart_product',
@@ -200,20 +231,4 @@ class CartBreadSeed extends Seeder
     
     }
 
-
-     /**
-     * [dataRow description].
-     *
-     * @param [type] $type  [description]
-     * @param [type] $field [description]
-     *
-     * @return [type] [description]
-     */
-    protected function dataRow($type, $field)
-    {
-        return DB::table('data_rows')->firstOrNew([
-            'data_type_id' => $type->id,
-            'field'        => $field,
-        ]);
-    }
 }

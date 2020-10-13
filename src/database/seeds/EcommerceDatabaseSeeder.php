@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Seeder;
 use TCG\Voyager\Traits\Seedable;
-use Boldstellar\Ecommerce\database\seeds\CartBreadSeeder;
 
 class EcommerceDatabaseSeeder extends Seeder
 {
@@ -17,6 +16,7 @@ class EcommerceDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->seed('CartBreadSeeder');
+        $this->seed(CartBreadSeed::class);
+        $this->seed(ProductBreadSeed::class);
     }
 }

@@ -2,8 +2,10 @@
 namespace Boldstellar\Ecommerce;
 
 use Illuminate\Support\ServiceProvider;
+use Boldstellar\Ecommerce\InstallCommand;
 
 class EcommerceServiceProvider extends ServiceProvider{
+
 
     public function boot()
     {
@@ -17,9 +19,8 @@ class EcommerceServiceProvider extends ServiceProvider{
         // ]);
     }
 
-    public function register()
-    {
-        
+    public function register(){
+        $this->commands(Commands\InstallCommand::class);
     }
 
 }

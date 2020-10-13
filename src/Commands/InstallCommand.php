@@ -5,9 +5,10 @@ namespace Boldstellar\Ecommerce\Commands;
 use Illuminate\Console\Command;
 use TCG\Voyager\Traits\Seedable;
 use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputOption;
 use Boldstellar\Ecommerce\EcommerceServiceProvider;
-
+ 
 class InstallCommand extends Command
 { 
 
@@ -19,7 +20,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    // protected $signature = 'command:name';
 
     protected $name = 'bs-ecommerce:install';
     /**
@@ -42,7 +43,7 @@ class InstallCommand extends Command
     public function getOptions()
     {
         return [
-            ['force', null, InputOption::NONE_VALUE, 'Migrating Database Forcefully using Force option', null]
+            ['force', null, InputOption::VALUE_NONE, 'Migrating Database Forcefully using Force option', null]
         ];
     }
 
@@ -59,7 +60,7 @@ class InstallCommand extends Command
     {
         return $this->handle($filesystem);
     }
-
+    
     
     /**
      * Execute the console command.
@@ -68,11 +69,12 @@ class InstallCommand extends Command
      */
     public function handle(Filesystem $filesystem)
     {
+        $this->seed('EcommerceDatabaseSeeder');
         $this->info('Publishing the ecommerce asset, database, seeds and config file ');
-        $this->call('vendor:publish', ['--publish' => EcommerceServiceProvider::class, '--tag' => 'seeds']);
+        $this->call('vendor:publish', ['--provider' => EcommerceServiceProvider::class, '--tag' => 'seeds']);
 
-        $this->info('Migrating Database and Breads');
-        $this->call('migrate', ['--force' => $this->option('force')]);
+        // $this->info('Migrating Database and Breads');
+        // $this->call('migrate', ['--force' => $this->option('force')]);
 
         $this->info('Updating Root package.json to include dependencies');
         $process = new Process([
@@ -88,7 +90,6 @@ class InstallCommand extends Command
         $process->setWorkingDirectory(base_path())->mustRun();
 
         $this->info('Seeding Data into Database');
-        $this->seed('EcommerceDatabaseSeeder');
 
         $this->info('Boldstellar Ecommerce installed Successfully, Enjoy! :)');
 
